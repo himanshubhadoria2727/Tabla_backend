@@ -1,11 +1,10 @@
 const User = require("../model/user.model");
 const { GenerateOtp } = require("../utility/notification");
 const { gensalt, hashpassword, GeneratesSignature } = require("../utility/password.hash");
-const registrationSchema = require("./user.dto");
+const { registrationSchema, verifySchema } = require('./user.dto')
 
 
-
-const adduser = async (req, res) => {
+const addUser = async (req, res) => {
     try {
         const { error } = registrationSchema.validate(req.body);
         if (error) {
@@ -50,7 +49,42 @@ const adduser = async (req, res) => {
     }
 };
 
+const verifyUser = async (req, res) => {
+    try {
+        const { error } = verifySchema.validate(req.body);
+        if (error) {
+            return res.status(400).json({ message: error.details[0].message });
+        }
+        let user = req.user
+        const { otp } = req.body
+
+        if (user) {
+            let verifyUser = await User.findById(user?._id)
+            if (verifyUser?.otp === otp) {
+                verifyUser.verified = true
+                let updatedVerifyuser = await verifyUser.save()
+                let signature = await GeneratesSignature({
+                    _id: updatedVerifyuser._id,
+                    verified: updatedVerifyuser.verified
+                })
+                return res.status(200).json({
+                    signature, verified: updatedVerifyuser?.verified, _id: updatedVerifyuser?._id
+                })
+            }
+        }
+        return res.status(400).json({ message: 'Not verified sucessfully' });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ "message": 'Internal Server Error' });
+    }
+
+}
+
+
+
+
+
 
 module.exports = {
-    adduser
+    addUser, verifyUser
 }

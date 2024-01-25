@@ -6,4 +6,10 @@ const registrationSchema = Joi.object({
     country_name: Joi.string().required(),
 });
 
-module.exports = registrationSchema;
+const verifySchema = Joi.object({
+    otp: Joi.string().required()
+})
+
+module.exports = {
+    registrationSchema, verifySchema
+};

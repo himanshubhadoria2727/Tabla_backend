@@ -1,7 +1,7 @@
 const { ValidateSignature } = require("../utility/password.hash")
 
 const Authenticateuser = async (req, res, next) => {
-    let validate = await ValidateSignature(req.body)
+    let validate = await ValidateSignature(req)
     if (validate) {
         return next()
     } else {
@@ -10,4 +10,8 @@ const Authenticateuser = async (req, res, next) => {
         })
     }
 
+}
+
+module.exports = {
+    Authenticateuser
 }
