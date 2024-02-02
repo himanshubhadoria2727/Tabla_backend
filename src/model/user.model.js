@@ -37,9 +37,12 @@ const userschema = new mongoose.Schema({
     verified: {
         type: Boolean
     },
-    plan: {
+
+    roles: [{
         type: String,
-    },
+        enum: ['user', 'admin'],
+        default: 'user'
+    }]
 
 }, {
     timestamps: true,

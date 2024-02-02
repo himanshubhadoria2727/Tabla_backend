@@ -80,6 +80,71 @@ const verifyUser = async (req, res) => {
 
 }
 
+const getUser = async (req, res) => {
+    try {
+        const query = constructSearchQuery(req.query);
+        const pageSize = 5;
+        const pageNumber = parseInt(
+            req.query.page ? req.query.page.toString() : "1"
+        );
+        const skip = (pageNumber - 1) * pageSize;
+
+
+
+        let allUser = await User.find(query).skip(skip).limit(pageSize).populate('plan');
+        const total = await User.countDocuments(query)
+        const planRespond = {
+            data: allUser,
+            pagination: {
+                total,
+                page: pageNumber,
+                pages: Math.ceil(total / pageSize),
+
+
+            }
+
+        }
+        return res.status(200).json(planRespond)
+    } catch (err) {
+        console.log(err);
+        return res.json({ "message": "Internal server error" })
+    }
+}
+
+
+const constructSearchQuery = (queryParams) => {
+    const constructedQuery = {};
+
+    if (queryParams.startdate && queryParams.enddate) {
+        const startDate = new Date(queryParams.startdate);
+        const endDate = new Date(queryParams.enddate);
+
+        if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+            console.error('Invalid date strings for startdate or enddate.');
+            return constructedQuery;  // Return an empty query or handle the error as needed
+        }
+
+        endDate.setHours(23, 59, 59, 999);
+
+        constructedQuery.createdAt = {
+            $gte: startDate,
+            $lte: endDate
+        };
+    }
+
+    if (queryParams.freeUser) {
+        constructedQuery['plan.plantype.amount'] = { $lte: 0 };
+    }
+
+    if (queryParams.paidUser) {
+        constructedQuery['plan.plantype.amount'] = { $gt: 0 };
+    }
+
+    return constructedQuery;
+};
+
+
+
 
 
 

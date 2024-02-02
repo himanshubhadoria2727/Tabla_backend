@@ -7,6 +7,7 @@ const router = express.Router()
 
 router.post('/register', addUser)
 router.post('/verify', Authenticateuser, verifyUser)
+router.get('/',)
 
 
 module.exports = router
