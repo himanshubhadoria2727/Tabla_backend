@@ -144,6 +144,37 @@ const constructSearchQuery = (queryParams) => {
 };
 
 
+const addLogin = async (req, res) => {
+    const { email, password } = req.body
+
+    if (email) {
+        try {
+            let existingUser = await User.findOne({ email: email });
+
+            if (existingUser) {
+
+                if (existingUser.password === password) {
+                    let signature = await GeneratesSignature({
+                        _id: existingUser?._id,
+                        email: existingUser?.email
+                    })
+                    return res.status(200).json({
+                        token: signature
+                    })
+                }
+            }
+
+            return res.json({
+                "Message": "Invalid Credential"
+            })
+
+        } catch (err) {
+            console.error(err)
+            return res.status(500).json({ "message": "An error occurred while checking the database" });
+        }
+    }
+}
+
 
 
 
@@ -151,5 +182,5 @@ const constructSearchQuery = (queryParams) => {
 
 
 module.exports = {
-    addUser, verifyUser
+    addUser, verifyUser, addLogin
 }

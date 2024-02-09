@@ -32,7 +32,7 @@ const addContent = async (req, res) => {
 const allContent = async (req, res) => {
     try {
 
-        let allContent = awaitContent.find({})
+        let allContent = await Content.find({})
 
         res.status(200).json(allContent);
 

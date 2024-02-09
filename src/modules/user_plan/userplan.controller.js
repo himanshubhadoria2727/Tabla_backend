@@ -57,34 +57,28 @@ const getUserplan = async (req, res) => {
         const searchQuery = constructSearchQuery(req.query);
         let allplans = await Plan.find(searchQuery)
 
-        let filter = {}
+        let filter = {};
+        console.log(allplans);
+
         if (allplans && allplans.length > 0) {
-            filter.plan = { $in: allplans.map(plan => plan._id) }
-
-        }
-        const startDate = moment(req.query.startdate).startOf('day');
-        const endDate = moment(req.query.enddate).endOf('day');
-
-        if (!startDate.isValid() || !endDate.isValid()) {
-            console.error('Invalid date strings for startdate or enddate.');
-            return res.json({ "message": "Invalid date strings for startdate or enddate." });
+            filter.plan = { $in: allplans.map(plan => plan._id) };
         }
 
-        filter.createdAt = {
-            $lte: new Date(endDate.toISOString()),
-            $gte: new Date(startDate.toISOString()),
-        };
+
+        console.log(filter, "checking filter");
 
         const users = await Uplan.find(filter)
             .populate('user')
-            .populate('plan').exec();
+            .populate('plan')
+            .exec();
 
-        res.json({ users })
+        res.json({ users });
     } catch (err) {
         console.log(err);
-        return res.json({ "message": "Internal server error" })
+        return res.json({ "message": "Internal server error" });
     }
-}
+};
+
 
 
 const constructSearchQuery = (queryParams) => {
@@ -164,9 +158,19 @@ const Createsub = async (user, plan) => {
     }
 };
 
-
+const deletedUser = async (req, res) => {
+    const { id } = req?.params
+    if (!id) {
+        throw new Error('id are not provided');
+    }
+    let deletedUser = await Uplan.findByIdAndDelete(id)
+    return res.status(200).json({
+        "message": "user will be deleted sucessfully",
+        deletedUser
+    })
+}
 
 
 module.exports = {
-    createUserplan, getUserplan
+    createUserplan, getUserplan, deletedUser
 }

@@ -8,11 +8,13 @@ const planSchema = require("./plan.dto");
 
 const addPlan = async (req, res) => {
     try {
+        console.log(req.body);
         const { error } = planSchema.validate(req.body)
         if (error) {
             return res.status(400).json({ message: error.details[0].message });
         }
         const { planname, description, plantype } = req.body
+        console.log(req.body);
         let savedPlan = await Plan.create({
             planname: planname,
             description: description,
@@ -35,7 +37,7 @@ const addPlan = async (req, res) => {
 const getPlan = async (req, res) => {
     try {
         const query = constructSearchQuery(req.query);
-        const pageSize = 5;
+        const pageSize = 200;
         const pageNumber = parseInt(
             req.query.page ? req.query.page.toString() : "1"
         );

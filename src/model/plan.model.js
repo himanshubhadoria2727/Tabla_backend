@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const planschema = new mongoose.Schema({
     planname: {
         type: String,
+        required: true
 
     },
 
