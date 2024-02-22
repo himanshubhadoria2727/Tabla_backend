@@ -44,28 +44,26 @@ function formatStripeAmount(USDString) {
 
 
 const ValidateSignature = async (req) => {
+    const signature = req.get("Authorization");
 
-
-    const signature = req.get("Authorization")
-
-
+    console.log(signature, "dwjdhu");
 
     if (signature) {
         try {
-            const paylaod = await Jwt.verify(signature.split(' ')[1], process.env.SECRET_KEY)
+            const payload = await Jwt.verify(signature.split(' ')[1], process.env.SECRET_KEY);
+            console.log(payload, "efhjefh");
 
-            req.user = paylaod
+            req.user = payload;
             return true;
 
         } catch (err) {
-            return false
+            // Handle JWT verification error
+            console.error("JWT verification error:", err);
+            return false;
         }
     }
 
-
-    return false;
 }
-
 
 
 
