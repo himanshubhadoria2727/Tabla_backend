@@ -3,15 +3,16 @@ const Tabla = require("../../model/tabla.model");
 
 
 
+
 const addTabla = async (req, res) => {
     try {
         const { pitch, taalname, subtaalname, taal, bpm } = req.body;
-        console.log(req.files);
-        const taalFiles = req.files.map((file, index) => ({
-            filename: file.filename,
-            bpm: bpm[index],
+        console.log(req.file);
+        const taalfiles = bpm.map((s) => ({
+            filename: req.file.filename,
+            bpm: s,
         }));
-
+        console.log(taalfiles);
         const newTabla = new Tabla({
             pitch,
             taalname,
@@ -21,8 +22,8 @@ const addTabla = async (req, res) => {
         });
 
         await newTabla.save();
-        console.log(taalFiles, "hfuef");
 
+        console.log(newTabla);
         return res.status(200).json({ message: 'Tabla added successfully' });
     } catch (err) {
         console.error(err);
@@ -30,8 +31,35 @@ const addTabla = async (req, res) => {
     }
 }
 
+const getTabla = async (req, res) => {
+    try {
+        let alltabla = await Tabla.find({}).populate('taalname').populate('subtaalname')
+
+
+        return res.status(200).json({ alltabla })
+
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ message: 'Internal Server Error' });
+    }
+}
+
+const delTabla = async (req, res) => {
+    try {
+        const { id } = req.params
+        let delT = await Tabla.findByIdAndDelete(id)
+        return res.status(200).json({
+            "message": "table will be deleted sucessfully"
+        })
+
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ message: 'Internal Server Error' });
+    }
+
+}
 
 
 module.exports = {
-    addTabla
+    addTabla, getTabla, delTabla
 }

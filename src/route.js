@@ -7,6 +7,7 @@ const contentRoute = require('./modules/content/content.route')
 const categoryRoute = require('./modules/category/category.route')
 const subcategoryRoute = require('./modules/subcategory/subcategory.route')
 const tablaRouter = require('./modules/tabla/tabla.route')
+const tanpuraRouter = require('./modules/tanpura/tanpura.route')
 
 
 
@@ -18,6 +19,7 @@ const registerRoute = (app) => {
     app.use('/api/category', categoryRoute)
     app.use('/api/subcategory', subcategoryRoute)
     app.use('/api/tabla', tablaRouter)
+    app.use('/api/tanpura', tanpuraRouter)
 
 
 
