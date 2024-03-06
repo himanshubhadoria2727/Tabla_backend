@@ -8,6 +8,8 @@ const categoryRoute = require('./modules/category/category.route')
 const subcategoryRoute = require('./modules/subcategory/subcategory.route')
 const tablaRouter = require('./modules/tabla/tabla.route')
 const tanpuraRouter = require('./modules/tanpura/tanpura.route')
+const surmandalRouter = require('./modules/surmandal/surmandal.route')
+const surpetiRouter = require('./modules/surpeti/surpeti.route')
 
 
 
@@ -20,6 +22,8 @@ const registerRoute = (app) => {
     app.use('/api/subcategory', subcategoryRoute)
     app.use('/api/tabla', tablaRouter)
     app.use('/api/tanpura', tanpuraRouter)
+    app.use('/api/surmandalRouter', surmandalRouter)
+    app.use('/api/surpetiRouter', surpetiRouter)
 
 
 

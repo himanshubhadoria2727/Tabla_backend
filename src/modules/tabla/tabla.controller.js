@@ -7,9 +7,9 @@ const Tabla = require("../../model/tabla.model");
 const addTabla = async (req, res) => {
     try {
         const { pitch, taalname, subtaalname, taal, bpm } = req.body;
-        console.log(req.file);
-        const taalfiles = bpm.map((s) => ({
-            filename: req.file.filename,
+        console.log(req.files);
+        const taalfiles = bpm.map((s, index) => ({
+            filename: req.files[index]?.filename,
             bpm: s,
         }));
         console.log(taalfiles);

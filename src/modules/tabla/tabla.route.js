@@ -4,7 +4,7 @@ const { upload } = require('../../utility/uploadfile')
 const { addTabla, getTabla, delTabla } = require('./tabla.controller')
 const router = express.Router()
 
-router.post('/add', upload.single('taalfile'), addTabla);
+router.post('/add', upload.array('taalfiles'), addTabla);
 router.get('/get', Authenticateuser, getTabla)
 router.delete('/del/:id', delTabla)
 

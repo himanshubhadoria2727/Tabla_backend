@@ -46,11 +46,11 @@ const allContent = async (req, res) => {
 
 const editcontent = async (req, res) => {
     try {
-        const { error } = contentValidationSchema.validate(req.body)
-        if (error) {
-            return res.status(400).json({ message: error.details[0].message });
-        }
-        const { title, description, bannerImage } = req.body;
+
+
+        const { title, description } = req.body;
+        const bannerImage = req?.file?.filename ? req?.file?.filename : req.body.bannerImage
+        console.log(req.body);
         const updatedContent = await Content.findByIdAndUpdate(req.params.id, { title, description, bannerImage }, { new: true });
         if (!updatedContent) {
             return res.status(404).json({ message: 'Content not found' });
