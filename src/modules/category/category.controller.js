@@ -4,9 +4,9 @@ const Category = require("../../model/category.model");
 const addCategory = async (req, res) => {
     try {
         const { CategoryName } = req.body
-
+        
         const CategoryImage = req?.file ? req?.file?.filename : "";
-
+        
         let savedCategory = await Category.create({
             CategoryName: CategoryName,
             CategoryImage: CategoryImage

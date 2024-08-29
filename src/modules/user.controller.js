@@ -150,9 +150,7 @@ const addLogin = async (req, res) => {
     if (email) {
         try {
             let existingUser = await User.findOne({ email: email });
-
             if (existingUser) {
-
                 if (existingUser.password === password) {
                     let signature = await GeneratesSignature({
                         _id: existingUser?._id,
@@ -173,6 +171,11 @@ const addLogin = async (req, res) => {
             return res.status(500).json({ "message": "An error occurred while checking the database" });
         }
     }
+    // else {
+    //     return res.json({
+    //         "Message": "Login failed"
+    //     })
+    // }
 }
 
 
@@ -182,5 +185,5 @@ const addLogin = async (req, res) => {
 
 
 module.exports = {
-    addUser, verifyUser, addLogin
+    addUser, verifyUser, addLogin, getUser
 }

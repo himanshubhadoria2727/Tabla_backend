@@ -6,7 +6,6 @@ const { addTanpura, getTanpura, deletedTanpura } = require('./tanpura.controller
 const router = express.Router()
 
 router.post('/add', upload.fields([{ name: 'file1', maxCount: 10 }]), addTanpura)
-
 router.get('/get', Authenticateuser, getTanpura)
 router.delete('/del/:id', deletedTanpura)
 
