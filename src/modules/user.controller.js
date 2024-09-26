@@ -70,7 +70,7 @@ const verifyUser = async (req, res) => {
       return res.status(400).json({ message: error.details[0].message });
     }
     let user = req.user;
-    const { otp } = req.body;
+    const { otp } = req.body; 
 
     if (user) {
       let verifyUser = await User.findById(user?._id);
@@ -242,7 +242,7 @@ const updateUser = async (req, res) => {
     try {
       // Extract user ID from the request body
       const { userId } = req.body;
-  
+      console.log('userid',userId)
       if (!userId) {
         console.error('User ID is missing in the request body');
         return res.status(400).json({ message: 'User ID is required.' });
